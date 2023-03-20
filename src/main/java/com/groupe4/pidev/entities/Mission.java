@@ -18,4 +18,5 @@ public class Mission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id_mission;
+    //zid les attribus mteik
 }

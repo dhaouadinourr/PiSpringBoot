@@ -18,4 +18,5 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id_comment;
+    //zid les attribus mteik
 }

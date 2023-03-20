@@ -21,5 +21,6 @@ public class Blog {
     Long id_blog;
 String nom_blog;
 String discription_blog;
+//zid les attribus mteik
 
 }

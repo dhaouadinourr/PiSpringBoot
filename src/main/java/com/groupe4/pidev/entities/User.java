@@ -19,10 +19,13 @@ public class User {
  String nom_user;
  String prenom_user;
  String mail_user;
+    //zid les attribus mteik ken fama
  @Enumerated(EnumType.STRING)
  Role role;
+    //amatlek type enumeree
 @ManyToMany
 (mappedBy="userevent")
     Set<Evenement> events;
+//hedhi teb3etni association maa l event
 
 }

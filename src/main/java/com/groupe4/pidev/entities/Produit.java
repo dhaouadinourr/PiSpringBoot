@@ -19,6 +19,7 @@ public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id_produit;
+    //zid les attribus mteik
 
 }
 

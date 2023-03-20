@@ -19,5 +19,5 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id_Article;
-
+    //zid les attribus mteik
 }

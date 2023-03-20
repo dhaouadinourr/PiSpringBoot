@@ -17,6 +17,7 @@ public class Categorie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id_categ;
     String nomCateg;
+    //zid les attribus mteik
     @OneToMany(mappedBy ="Categ")
     Set<Evenement> evenements;
 

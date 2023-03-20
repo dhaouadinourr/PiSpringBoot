@@ -18,4 +18,5 @@ public class Commande {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id_commande;
+    //zid les attribus mteik
 }
