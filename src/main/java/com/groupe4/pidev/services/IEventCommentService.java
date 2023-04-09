@@ -11,5 +11,6 @@ public interface IEventCommentService {
     void deleteCom(Long id);
     List<EventComment> findAllEventCom();
     EventComment findEventComById(Long id);
+    //
 
 }
