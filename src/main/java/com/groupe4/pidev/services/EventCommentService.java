@@ -12,6 +12,7 @@ public class EventCommentService implements IEventCommentService {
         private EventCommentRepo eventCommentRepo;
     @Override
     public EventComment addCom(EventComment eventComment) {
+
         return eventCommentRepo.save(eventComment);
     }
 
