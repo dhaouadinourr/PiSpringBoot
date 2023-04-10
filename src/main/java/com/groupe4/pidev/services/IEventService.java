@@ -10,5 +10,6 @@ public interface IEventService {
     void deleteEvent(Long id);
     List<Evenement> findAllEvent();
     Evenement findEventById(Long id);
+    public String SendSms(String Phone, String message);
 
 }
