@@ -4,10 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @AllArgsConstructor
@@ -19,7 +17,15 @@ public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id_produit;
-    //zid les attribus mteik
+    String nom;
+    String description;
+    String image;
+    LocalDate datedecreation;
+    Double prix;
+    int quantity;
+
+    @ManyToOne
+    ProduitCategory produitCategory;
 
 }
 
