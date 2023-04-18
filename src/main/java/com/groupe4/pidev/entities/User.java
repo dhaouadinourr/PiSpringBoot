@@ -1,5 +1,6 @@
 package com.groupe4.pidev.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -28,4 +29,7 @@ public class User {
     Set<Evenement> events;
 //hedhi teb3etni association maa l event
 
+    @JsonIgnore
+    @ManyToMany
+    Set<Mymission> missions;
 }
