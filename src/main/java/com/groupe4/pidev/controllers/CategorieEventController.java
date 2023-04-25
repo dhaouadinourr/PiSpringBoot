@@ -10,6 +10,7 @@ import java.util.List;
 @RequestMapping("/categorie")
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class CategorieEventController {
     ICategorieService iCategorieService;
 

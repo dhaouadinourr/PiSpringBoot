@@ -1,5 +1,6 @@
 package com.groupe4.pidev.services;
 
+import com.groupe4.pidev.entities.Categorie;
 import com.groupe4.pidev.entities.Evenement;
 import com.groupe4.pidev.repositories.EventRepo;
 import com.twilio.Twilio;
@@ -29,8 +30,8 @@ public class EventServiceImpl implements IEventService {
     @Value("${app.TWILIO_ACCOUNT_SID}")
     private  String Service_TWILIO_ACCOUNT_SID;
     @Override
-    public Evenement addEvent(Evenement evenement) {
-        return eventRepo.save(evenement);
+    public long addEvent(Evenement evenement) {
+        return eventRepo.save(evenement).getId_event();
     }
 
     @Override
@@ -61,5 +62,10 @@ public class EventServiceImpl implements IEventService {
                 new PhoneNumber("+15074605523"), message).create();
         log.info("Sms Send");
         return "Message sent successfully";
+    }
+
+    @Override
+    public List<Evenement> findEventbyCateg(Categorie cat) {
+        return eventRepo.findByCateg(cat);
     }
 }

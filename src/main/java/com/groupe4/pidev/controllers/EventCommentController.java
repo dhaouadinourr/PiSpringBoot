@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/eventComment")
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class EventCommentController {
 
     IEventCommentService iEventCommentService;

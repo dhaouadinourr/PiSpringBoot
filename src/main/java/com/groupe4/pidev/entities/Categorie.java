@@ -1,5 +1,6 @@
 package com.groupe4.pidev.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,7 +19,8 @@ public class Categorie {
     Long id_categ;
     String nomCateg;
     //zid les attribus mteik
-    @OneToMany(mappedBy ="Categ")
+    @OneToMany(mappedBy ="categ")
+    @JsonIgnore
     Set<Evenement> evenements;
 
 }

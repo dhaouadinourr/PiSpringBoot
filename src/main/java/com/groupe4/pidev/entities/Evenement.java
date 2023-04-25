@@ -1,7 +1,9 @@
 package com.groupe4.pidev.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -21,15 +23,22 @@ public class Evenement {
     Long id_event;
     String nomEvent;
     String details;
-    LocalDate dateDebut;
-    LocalDate dateFin;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    Date dateDebut;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    Date dateFin;
+
+    String picture;
 
 
-@ManyToMany
+ @ManyToMany
     Set<User> userevent;
     @ManyToOne
-    Categorie Categ;
+    Categorie categ;
     @OneToMany(mappedBy ="events")
     Set<EventComment> eventComments;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "image", fetch = FetchType.EAGER)
+    private Set<MultiPicture> products;
 }
