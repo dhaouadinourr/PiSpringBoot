@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -67,5 +68,9 @@ public class EventServiceImpl implements IEventService {
     @Override
     public List<Evenement> findEventbyCateg(Categorie cat) {
         return eventRepo.findByCateg(cat);
+    }
+    @Override
+    public List<Evenement> findByDate(Date db , Date df) {
+        return eventRepo.findByDateDebutBetween (db,df);
     }
 }

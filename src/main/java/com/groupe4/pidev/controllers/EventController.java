@@ -8,9 +8,11 @@ import com.groupe4.pidev.entities.Categorie;
 import com.groupe4.pidev.entities.Evenement;
 import com.groupe4.pidev.entities.MultiPicture;
 import com.groupe4.pidev.repositories.MultiPictureRepo;
+import com.groupe4.pidev.services.EventServiceImpl;
 import com.groupe4.pidev.services.IEventService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -18,10 +20,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.io.FilenameUtils;
+
 import javax.servlet.ServletContext;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import org.apache.commons.io.FileUtils;
 
@@ -30,7 +33,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Set;
 
 
 @RestController
@@ -63,8 +65,8 @@ public class EventController implements ServletContextAware {
 
     @PostMapping("/add")
     public long add(@RequestParam("files") MultipartFile[] files,
-                         @RequestParam("event") String evenement,
-                         @RequestParam("file") MultipartFile image) throws JsonParseException, JsonMappingException, Exception {
+                    @RequestParam("event") String evenement,
+                    @RequestParam("file") MultipartFile image) throws JsonParseException, JsonMappingException, Exception {
 
         Evenement arti = new ObjectMapper().readValue(evenement, Evenement.class);
         boolean isExit = new File(context.getRealPath("/Imagess/")).exists();
@@ -153,7 +155,6 @@ public class EventController implements ServletContextAware {
     }
 
 
-
 //    @GetMapping(path = "/Imgarticles/{id}")
 //    public List<byte[]> getPhoto(@PathVariable("id") Long id) throws Exception {
 //        ArrayList<MultiPicture> files = new ArrayList<MultiPicture>();
@@ -185,14 +186,28 @@ public class EventController implements ServletContextAware {
         return Files.readAllBytes(Paths.get(context.getRealPath("/Imagess/") + Article.getName()));
     }
 
-//    @GetMapping(path = "/Imgarticle/{id}")
+    //    @GetMapping(path = "/Imgarticle/{id}")
 //    public byte[] getProductImage(@PathVariable("id") Long id) throws Exception {
 //        Evenement Article = iEventService.findEventById(id);
 //        return Files.readAllBytes(Paths.get(context.getRealPath("/Imagess/") + Article.getPicture()));
 //    }
-    @GetMapping(path="/Imgarticle/{id}")
-    public byte[] getPhoto(@PathVariable("id") Long id) throws Exception{
+    @GetMapping(path = "/Imgarticle/{id}")
+    public byte[] getPhoto(@PathVariable("id") Long id) throws Exception {
         Evenement Article = iEventService.findEventById(id);
-        return Files.readAllBytes(Paths.get("Imagess/null/"+Article.getPicture()));
+        return Files.readAllBytes(Paths.get("Imagess/null/" + Article.getPicture()));
     }
+
+    @GetMapping(path = "/findbydate")
+    public List<Evenement> findByPrice(@RequestParam("startDate") String startDateString,
+                                       @RequestParam("endDate") String endDateString) throws ParseException {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = format.parse(startDateString);
+        Date endDate = format.parse(endDateString);
+
+            return iEventService.findByDate(startDate, endDate);
+
+    }
+
+
 }
