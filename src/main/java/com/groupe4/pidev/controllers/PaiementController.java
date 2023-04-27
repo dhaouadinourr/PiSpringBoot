@@ -2,10 +2,14 @@ package com.groupe4.pidev.controllers;
 
 import com.groupe4.pidev.entities.Paiement;
 import com.groupe4.pidev.services.IPaiementService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@RestController
+@RequestMapping("paiement")
+@AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class PaiementController {
     private IPaiementService iPaiementService;
 
