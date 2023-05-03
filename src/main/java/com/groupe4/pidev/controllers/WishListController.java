@@ -2,7 +2,6 @@ package com.groupe4.pidev.controllers;
 
 
 import com.groupe4.pidev.entities.Produit;
-import com.groupe4.pidev.services.UserServiceImpl;
 import com.groupe4.pidev.services.WishListServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -14,8 +14,8 @@ import java.util.Set;
 @Service
 public class WishListServiceImpl {
 
-    @Autowired
-    private IUserService userService;
+
+
 
     @Autowired
     private ProduitService produitService;
@@ -27,7 +27,7 @@ public class WishListServiceImpl {
     private ProduitRepo produitRepo;
 
     private User findClientById(Long id) throws Exception {
-        return userService.findById(id);
+        return userRepo.findById(id).orElse(null);
     }
 
     private Produit findProduitById(Long id) throws Exception {
