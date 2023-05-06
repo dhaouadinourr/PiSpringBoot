@@ -38,7 +38,7 @@ import java.nio.file.Paths;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/event")
-@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EventController implements ServletContextAware {
     IEventService iEventService;
     ServletContext context;
@@ -114,7 +114,7 @@ public class EventController implements ServletContextAware {
         System.out.println("Save Article 333333.............");
         arti.setPicture(newFileName);
 
-        System.out.println("Save Article 333333.............");
+       /* System.out.println("Save Article 333333.............");
         iEventService.SendSms("+21628736139",
                 "We are excited to invite you to an upcoming event that we believe you will enjoy. The event will be taking place on [Date] at [Time] and will be located at [Location].\n" +
                         "\n" +
@@ -122,7 +122,7 @@ public class EventController implements ServletContextAware {
                         "\n" +
                         "If you have any questions about the event or need any assistance, please do not hesitate to contact us. We look forward to seeing you at the event.\n" +
                         "\n" +
-                        "Best regards,");
+                        "Best regards,");*/
 
         return iEventService.addEvent(arti);
     }
@@ -209,5 +209,23 @@ public class EventController implements ServletContextAware {
 
     }
 
+    @GetMapping("/participant-count/{id}")
+    public ResponseEntity<Long> getParticipantCountByEvent(@PathVariable("id") Long eventId) {
+        Long participantCount = iEventService.getParticipantCountByEvent(eventId);
+        return ResponseEntity.ok(participantCount);
+    }
 
+    @PostMapping("/addusers/{eventId}/{userId}")
+    public ResponseEntity<Void> addUserToEvent(@PathVariable("eventId") Long eventId,
+                                               @PathVariable("userId") Long userId) {
+        iEventService.addUserToEvent(eventId, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/removeusers/{eventId}/{userId}")
+    public ResponseEntity<Void> removeUserFromEvent(@PathVariable("eventId") Long eventId,
+                                                    @PathVariable("userId") Long userId) {
+        iEventService.removeUserFromEvent(eventId, userId);
+        return ResponseEntity.ok().build();
+    }
 }

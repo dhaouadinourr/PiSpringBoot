@@ -1,8 +1,10 @@
 package com.groupe4.pidev.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -20,11 +22,13 @@ public class Produit {
     String nom;
     String description;
     String image;
+    @CreationTimestamp
     LocalDate datedecreation;
     Double prix;
     int quantity;
 
     @ManyToOne
+            @JsonIgnore
     ProduitCategory produitCategory;
 
 }

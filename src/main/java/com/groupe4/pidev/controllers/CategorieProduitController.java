@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("produitCategorie")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class CategorieProduitController {
     IProduitCategoryservice iCategorieService;
 

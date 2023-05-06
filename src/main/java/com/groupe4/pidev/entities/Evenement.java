@@ -42,4 +42,17 @@ public class Evenement {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "image", fetch = FetchType.EAGER)
     private Set<MultiPicture> products;
+
+
+    public void addParticipant(User user) {
+        this.userevent.add(user);
+        user.getEvents().add(this);
+    }
+
+    public void removeParticipant(User user) {
+        this.userevent.remove(user);
+        user.getEvents().remove(this);
+    }
+
+
 }
