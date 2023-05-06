@@ -4,10 +4,8 @@ package com.groupe4.pidev.controllers;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.groupe4.pidev.entities.ImageFile;
 import com.groupe4.pidev.entities.Produit;
 import com.groupe4.pidev.entities.ProduitCategory;
-import com.groupe4.pidev.repositories.ImagesRepo;
 import com.groupe4.pidev.services.IProduitService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.FileUtils;
@@ -30,16 +28,17 @@ import java.util.Set;
 @RestController
 @RequestMapping("produit")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProduitController implements ServletContextAware {
     private IProduitService iProduitService;
 
     ServletContext context;
-    ImagesRepo imageRepository;
+
 
     @PostMapping("/add")
-    public Produit newProduct(@RequestParam("files") MultipartFile[] files,
-                              @RequestParam("product") String product,
-                              @RequestParam("file") MultipartFile image) throws JsonParseException, JsonMappingException, Exception {
+    public Produit newProduct(
+            @RequestParam("product") String product,
+            @RequestParam("file") MultipartFile image) throws JsonParseException, JsonMappingException, Exception {
 
         Produit arti = new ObjectMapper().readValue(product, Produit.class);
         boolean isExit = new File(context.getRealPath("/Imagess/")).exists();
@@ -48,24 +47,8 @@ public class ProduitController implements ServletContextAware {
             System.out.println("mk dir Imagess.............");
         }
         System.out.println("Save Article  22222.............");
-        Set<ImageFile> photos = new HashSet<>();
-        for (MultipartFile file : files) {
-            ImageFile fileinfo = new ImageFile();
-            String filename = file.getOriginalFilename();
-            String newFileName = FilenameUtils.getBaseName(filename) + "." + FilenameUtils.getExtension(filename);
-            File serverFile = new File(context.getRealPath("/Imagess/" + File.separator + newFileName));
-            try {
-                System.out.println("Image");
-                FileUtils.writeByteArrayToFile(serverFile, file.getBytes());
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            fileinfo.setName(newFileName);
-            fileinfo.setImage(arti);
-            imageRepository.save(fileinfo);
-            photos.add(fileinfo);
-        }
+
         String fileName = image.getOriginalFilename();
         String newFileName = FilenameUtils.getBaseName(fileName) + "." + FilenameUtils.getExtension(fileName);
         File serverFile = new File(context.getRealPath("/Imagess/" + File.separator + newFileName));
@@ -116,40 +99,6 @@ public class ProduitController implements ServletContextAware {
     public void setServletContext(ServletContext servletContext) {
         this.context = servletContext;
     }
-
-
-    @GetMapping(path = "/Imgarticles/{id}")
-    public List<byte[]> getPhoto(@PathVariable("id") Long id) throws Exception {
-        ArrayList<ImageFile> files = new ArrayList<ImageFile>();
-        Produit product = iProduitService.findProduitById(id);
-        List<byte[]> fi = new ArrayList<>();
-        files = imageRepository.findByImage(product);
-        System.out.println(files);
-
-        for (ImageFile file : files) {
-            // fi.add(Files.readAllBytes(Paths.get(context.getRealPath("/Imagess/")+file.getImage())));
-            fi.add(Files.readAllBytes(Paths.get(context.getRealPath("/Imagess/") + file.getName())));
-        }
-
-        return fi;
-    }
-
-    @GetMapping("/images/{id}")
-    public ResponseEntity<List<ImageFile>> getImagesByProduct(@PathVariable("id") Long id) throws Exception {
-        ArrayList<ImageFile> files = new ArrayList<ImageFile>();
-        Produit product = iProduitService.findProduitById(id);
-        files = imageRepository.findByImage(product);
-        return new ResponseEntity<>(files, HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/getimage/{id}")
-    public byte[] getPhotoProduct(@PathVariable("id") Long id) throws Exception {
-        ImageFile Article = imageRepository.findById(id).orElseThrow(() -> new Exception("File by id " + id + " was not found"));
-        ;
-        return Files.readAllBytes(Paths.get(context.getRealPath("/Imagess/") + Article.getName()));
-    }
-
-
 
     @GetMapping(path = "/Imgarticle/{id}")
     public byte[] getProductImage(@PathVariable("id") Long id) throws Exception {

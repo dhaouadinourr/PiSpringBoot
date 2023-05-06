@@ -1,5 +1,6 @@
 package com.groupe4.pidev.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
