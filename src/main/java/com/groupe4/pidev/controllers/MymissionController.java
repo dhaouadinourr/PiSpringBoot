@@ -1,9 +1,9 @@
 package com.groupe4.pidev.controllers;
 
+import com.groupe4.pidev.entities.Competence;
 import com.groupe4.pidev.entities.Mymission;
 import com.groupe4.pidev.services.IMymissionService;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.*;;
 
 import java.util.List;
 import java.util.Set;
@@ -12,7 +12,7 @@ import java.util.Set;
 @RequestMapping("Mymission")
 @CrossOrigin(origins = "http://localhost:4200")
 public class MymissionController {
-     IMymissionService MymissionService;
+    IMymissionService MymissionService;
 
     public MymissionController(IMymissionService IMymissionService) {
         this.MymissionService = IMymissionService;
@@ -46,14 +46,23 @@ public class MymissionController {
         return MymissionService.addMissionWithCompetence(idMission,idCpmts);
     }
 
-    @PutMapping("addWtUser/{id}/{name}")
-    public Mymission AssignUserToMission(@PathVariable("id") Long idMission,@PathVariable("name") String nameU){
+    @PutMapping("addWtUser/{id}")
+    public Mymission AssignUserToMission(@PathVariable("id") Long idMission,@RequestBody String nameU){
         return MymissionService.AssignUserToMission(idMission,nameU);
     }
     @GetMapping("getCapacity/{id}")
     public boolean verifMissionCapacity(@PathVariable("id") Long idMission){
         return MymissionService.verifMissionCapacity(idMission);
     }
-    
+
+    @GetMapping("nbPlaces/{id}")
+    public Long getNbPlaces(@PathVariable("id") Long idMission){
+        return MymissionService.getNbPlaces(idMission);
+    }
+
+    @GetMapping("getCompForMiss/{id}")
+    public Set<Competence> getCompetencesForMission(@PathVariable("id") Long missionId){
+        return MymissionService.getCompetencesForMission(missionId);
+    }
 
 }

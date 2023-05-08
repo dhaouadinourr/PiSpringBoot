@@ -80,6 +80,6 @@ public class User {
 //hedhi teb3etni association maa l event
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(mappedBy = "users")
     Set<Mymission> missions;
 }

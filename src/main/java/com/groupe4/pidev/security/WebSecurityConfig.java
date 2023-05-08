@@ -65,7 +65,16 @@ public class WebSecurityConfig   {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/users").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
-                .antMatchers("/api/auth/deleteuser/{id}").access("hasRole('ROLE_ADMIN') and isAuthenticated()");
+                .antMatchers("/api/auth/deleteuser/{id}").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
+                .antMatchers("/Mymission/getAll").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
+                .antMatchers("/Mymission/delete/{id}").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
+                .antMatchers("/Mymission/add").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
+                .antMatchers("/Mymission/update").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
+                .antMatchers("/Mymission/addWC/{idM}").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
+                .antMatchers("/Competence/add").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
+                .antMatchers("/Competence/update").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
+                .antMatchers("/Competence/getAll").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
+                .antMatchers("/Competence/delete/{id}").access("hasRole('ROLE_ADMIN') and isAuthenticated()");
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

@@ -19,5 +19,6 @@ public interface IMymissionService {
 
     boolean verifMissionCapacity(Long idMission);
 
+    Long getNbPlaces(Long idMission);
     Set<Competence> getCompetencesForMission(Long missionId);
 }
