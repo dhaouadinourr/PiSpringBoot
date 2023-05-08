@@ -21,4 +21,6 @@ public interface UserService {
     User getByToken(String token);
 
     void updatePassword(User user,String newPassword);
+
+    User findById (Long id);
 }

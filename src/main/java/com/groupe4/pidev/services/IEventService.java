@@ -2,6 +2,7 @@ package com.groupe4.pidev.services;
 
 import com.groupe4.pidev.entities.Categorie;
 import com.groupe4.pidev.entities.Evenement;
+import com.groupe4.pidev.entities.Mymission;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -21,4 +22,6 @@ public interface IEventService {
     public Long getParticipantCountByEvent(Long eventId);
     public void addUserToEvent(Long eventId, Long userId);
     public void removeUserFromEvent(Long eventId, Long userId);
+
+    Evenement AssignUserToEvent(Long idMission, String nameU);
 }

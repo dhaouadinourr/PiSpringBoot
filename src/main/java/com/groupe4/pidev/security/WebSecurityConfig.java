@@ -62,9 +62,11 @@ public class WebSecurityConfig   {
 
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
+
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/users").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
+                .antMatchers("/**").permitAll()
                 .antMatchers("/api/auth/deleteuser/{id}").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
                 .antMatchers("/Mymission/getAll").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
                 .antMatchers("/Mymission/delete/{id}").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
@@ -75,6 +77,7 @@ public class WebSecurityConfig   {
                 .antMatchers("/Competence/update").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
                 .antMatchers("/Competence/getAll").access("hasRole('ROLE_ADMIN') and isAuthenticated()")
                 .antMatchers("/Competence/delete/{id}").access("hasRole('ROLE_ADMIN') and isAuthenticated()");
+
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

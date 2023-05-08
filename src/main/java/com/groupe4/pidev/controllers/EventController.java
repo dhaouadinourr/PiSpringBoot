@@ -7,6 +7,7 @@ import com.groupe4.pidev.Utils.FileUploadUtil;
 import com.groupe4.pidev.entities.Categorie;
 import com.groupe4.pidev.entities.Evenement;
 import com.groupe4.pidev.entities.MultiPicture;
+import com.groupe4.pidev.entities.Mymission;
 import com.groupe4.pidev.repositories.MultiPictureRepo;
 import com.groupe4.pidev.services.EventServiceImpl;
 import com.groupe4.pidev.services.IEventService;
@@ -134,6 +135,7 @@ public class EventController implements ServletContextAware {
 
     @GetMapping("/getAll")
     public List<Evenement> getAll() {
+
         return iEventService.findAllEvent();
     }
 
@@ -227,5 +229,10 @@ public class EventController implements ServletContextAware {
                                                     @PathVariable("userId") Long userId) {
         iEventService.removeUserFromEvent(eventId, userId);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("addWtUser/{id}")
+    public Evenement AssignUserToMission(@PathVariable("id") Long idMission, @RequestBody String nameU){
+        return iEventService.AssignUserToEvent(idMission,nameU);
     }
 }

@@ -74,9 +74,19 @@ public class User {
 
 
     }
+    @JsonIgnore
 @ManyToMany
+
 (mappedBy="userevent")
     Set<Evenement> events;
+
+    @OneToMany(mappedBy = "sender")
+    @JsonIgnore
+    private Set<ChatMessage> msg;
+
+    @OneToMany(mappedBy = "reciver")
+    @JsonIgnore
+    private Set<ChatMessage> resivermsg;
 //hedhi teb3etni association maa l event
 
     @JsonIgnore

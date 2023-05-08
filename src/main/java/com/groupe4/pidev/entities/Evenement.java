@@ -1,6 +1,7 @@
 package com.groupe4.pidev.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -8,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,12 +34,14 @@ public class Evenement {
 
 
 
- @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+
     Set<User> userevent;
     @ManyToOne
     Categorie categ;
-    @OneToMany(mappedBy ="events")
-    Set<EventComment> eventComments;
+    @OneToMany(cascade=CascadeType.PERSIST,mappedBy = "events",fetch=FetchType.LAZY)
+    @JsonManagedReference(value="eventcom")
+    List<EventComment> comments;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "image", fetch = FetchType.EAGER)
