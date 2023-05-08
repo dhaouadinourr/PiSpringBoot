@@ -205,7 +205,7 @@ public class AuthController {
     private void sendEmail(String email, String resetPasswordlink) throws MessagingException, UnsupportedEncodingException, javax.mail.MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-        helper.setFrom("mariem.benkhlifa@esprit.tn","amal151617000");
+        helper.setFrom("jasser.boukraya@esprit.tn","Admin Jasser");
         helper.setTo(email);
         String subject="Heres the link to reset your password";
         String content="<p>Hello,</p>" +
