@@ -18,4 +18,8 @@ public class CommentController {
     public void addComment(@PathVariable Long articleId, @RequestBody Comment comment){
         commentService.createComment(articleId, comment);
     }
+    @DeleteMapping("/delete/{id}/{idA}")
+    public void deleteComment(@PathVariable Long id, @PathVariable("idA") Long idA){
+        commentService.deleteComment(id,idA);
+    }
 }

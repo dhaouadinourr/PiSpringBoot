@@ -23,7 +23,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public void deleteComment(Long id) {
+    public void deleteComment(Long id, Long idA) {
     }
 
     @Override

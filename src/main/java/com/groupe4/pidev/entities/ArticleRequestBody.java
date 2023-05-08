@@ -12,4 +12,5 @@ public class ArticleRequestBody {
     private String title;
     private String description;
     private String content;
+    String picture;
 }

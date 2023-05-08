@@ -12,7 +12,11 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IArticleService {
-    void addArticle(ArticleRequestBody article, MultipartFile image) throws IOException;
+//    void addArticle(ArticleRequestBody article, MultipartFile image) throws IOException;
+
+
+
+Long addArticle(Article article);
     void editArticle(Long id, ArticleRequestBody article, MultipartFile image) throws IOException;;
     void deleteArticle(Long id);
     List<ArticleResponseBody> findAllArticle();

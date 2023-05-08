@@ -1,5 +1,6 @@
 package com.groupe4.pidev.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -25,21 +26,22 @@ public class Article {
     @Column(name= "content")
     private String content;
 
-    @Column(name= "image")
-    private byte[] image;
+
+ /*   @Column(name= "image")
+    private byte[] image;*/
+
     private Date createdAt;
-  //  @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-  //  private List<Vote> votes = new ArrayList<>();
+
     private Double etoile;
 
     private Date updatedAt;
+    String picture;
     @ElementCollection
     private Map<Long,Double> ClientEtoile;
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
-   // public int getScore(double averageScore) {
-      //  return this.votes.stream().mapToInt(Vote::getNote).sum();
-   // }
+
+
 
 
 }

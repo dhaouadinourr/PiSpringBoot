@@ -18,7 +18,7 @@ public class ArticleService implements IArticleService {
     private ArticleRepo articleRepo;
     private UserRepo userRepo;
 
-    @Override
+ /*   @Override
     public void addArticle(ArticleRequestBody articleRequestBody, MultipartFile image) throws IOException {
         //Article article = ArticleMapper.INSTANCE.articleRequestBodyToArticle(articleRequestBody);
         Article article = new Article();
@@ -28,7 +28,14 @@ public class ArticleService implements IArticleService {
         article.setCreatedAt(new Date());
         article.setUpdatedAt(new Date());
         article.setImage(image.getBytes());
+
         articleRepo.save(article);
+    }*/
+
+
+    @Override
+    public Long addArticle(Article article) {
+        return articleRepo.save(article).getId();
     }
 
     @Override
@@ -37,7 +44,8 @@ public class ArticleService implements IArticleService {
         if(!articleRequestBody.getTitle().isEmpty()) article.setTitle(articleRequestBody.getTitle());
         if(!articleRequestBody.getDescription().isEmpty())article.setDescription(articleRequestBody.getDescription());
         if(!articleRequestBody.getContent().isEmpty())article.setContent(articleRequestBody.getContent());
-        if(!image.isEmpty())article.setImage(image.getBytes());
+        //if(!image.isEmpty())article.setImage(image.getBytes());
+        if(!image.isEmpty())article.setPicture(image.getContentType());
         article.setUpdatedAt(new Date());
         articleRepo.save(article);
     }
@@ -65,7 +73,12 @@ public class ArticleService implements IArticleService {
         articleResponseBody.setId(article.getId());
         articleResponseBody.setTitle(article.getTitle());
         articleResponseBody.setCreationDate(article.getCreatedAt().toString());
-        articleResponseBody.setImage(article.getImage());
+        //articleResponseBody.setImage(article.getImage());
+        articleResponseBody.setPicture(article.getPicture());
+
+
+
+
         return articleResponseBody;
     }
 
@@ -81,7 +94,9 @@ public class ArticleService implements IArticleService {
         articleDetailsResponseBody.setContent(article.getContent());
         articleDetailsResponseBody.setCreatedAt(article.getCreatedAt().toString());
         articleDetailsResponseBody.setUpdatedAt(article.getCreatedAt().toString());
-        articleDetailsResponseBody.setImage(article.getImage());
+       // articleDetailsResponseBody.setImage(article.getImage());
+        articleDetailsResponseBody.setPicture(article.getPicture());
+
         List<CommentResponseBody> commentList = new ArrayList<>();
         for(var commentVar : article.getComments()){
             commentList.add(commentMapper(commentVar));

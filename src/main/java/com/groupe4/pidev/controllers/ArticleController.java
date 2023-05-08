@@ -1,19 +1,28 @@
 package com.groupe4.pidev.controllers;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.groupe4.pidev.Utils.FileUploadUtil;
 import com.groupe4.pidev.entities.*;
 import com.groupe4.pidev.repositories.ArticleRepo;
 import com.groupe4.pidev.repositories.UserRepo;
 import com.groupe4.pidev.services.IArticleService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @RestController
 @AllArgsConstructor
@@ -22,73 +31,60 @@ public class ArticleController {
     private IArticleService articleService;
     private ArticleRepo articleRepo;
     private UserRepo userRepo;
-   // private VoteRepo voteRepo;
+    ServletContext context;
 
     @GetMapping("/search")
     public List<Article> searchArticles(@RequestParam(value = "q") String searchTerm){
         return articleRepo.findByTitleContaining(searchTerm);
     }
- /*   @PostMapping("/{id}/vote")
-    @Transactional
-    public ResponseEntity<Void> voteArticle(@PathVariable Long id){
-        Optional<Article> article = articleRepo.findById(id);
-        if(article.isPresent()){
-            articleRepo.addVote(id);
-            return ResponseEntity.ok().build();
-        }else{
-            return ResponseEntity.notFound().build();
+    private String saveImage(MultipartFile multipartFile) {
+        try {
+            byte[] bytes = multipartFile.getBytes();
+            Path path = Paths.get(context.getRealPath("/Imagess/" + multipartFile.getOriginalFilename()));
+            Files.write(path, bytes);
+            return multipartFile.getOriginalFilename();
+        } catch (IOException e) {
+            return null;
         }
-    }*/
-  /*  @DeleteMapping("/{id}/vote")
-    @Transactional
-    public ResponseEntity<Void> removeVoteArticle(@PathVariable Long id){
-        Optional<Article> article = articleRepo.findById(id);
-        if (article.isPresent()) {
-            articleRepo.removeVote(id);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
+    }
+    @PostMapping("/add")
+    public long add(
+                    @RequestParam("article") String article,
+                    @RequestParam("file") MultipartFile image
+                   ) throws JsonParseException, JsonMappingException, Exception {
+        Article arti = new ObjectMapper().readValue(article, Article.class);
+        boolean isExit = new File(context.getRealPath("/Imagess/")).exists();
+        String fileN = StringUtils.cleanPath(image.getOriginalFilename());
+        arti.setPicture(fileN);
+        System.out.println(arti.getId());
+        String uploadDir = "Imagess/" + arti.getId();
+        System.out.println(uploadDir);
+        FileUploadUtil.saveFile(uploadDir, fileN, image);
+        if (!isExit) {
+            new File(context.getRealPath("/Imagess/")).mkdir();
         }
-    }*/
-   /* @PostMapping("/{id}/votes")
-    @Transactional
-    public ResponseEntity<Article> vote(@PathVariable Long id, @RequestParam(value = "note") int note, @RequestParam(value = "userId") Long userId) {
-        Article article = articleRepo.findArticleById(id);
-        User user = userRepo.getById(userId);
 
-        // Vérifier si l'utilisateur a déjà voté pour cet article
-        List<Vote> existingVotes = article.getVotes().stream()
-                .filter(vote -> vote.getUser().getID_user().equals(userId))
-                .collect(Collectors.toList());
-        if (!existingVotes.isEmpty()) {
-            return ResponseEntity.badRequest().body(article);
+        String fileName = image.getOriginalFilename();
+        String newFileName = FilenameUtils.getBaseName(fileName) + "." + FilenameUtils.getExtension(fileName);
+        File serverFile = new File(context.getRealPath("/Imagess/" + File.separator + newFileName));
+        try {
+            System.out.println("Image");
+            FileUtils.writeByteArrayToFile(serverFile, image.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        // Enregistrer le vote
-        Vote vote = new Vote(user, article, note);
-        voteRepo.save(vote);
-
-        // Recalculer le score de l'article
-        List<Vote> votes = article.getVotes();
-        int totalScore = votes.stream().mapToInt(Vote::getNote).sum();
-        double averageScore = (double) totalScore / votes.size();
-        article.getScore(averageScore);
-        articleRepo.save(article);
-
-        return ResponseEntity.ok(article);
-    }*/
-
-
-
-
-
+        arti.setPicture(newFileName);
+        return articleService.addArticle(arti);
+    }
+    @GetMapping(path = "/Imgarticle/{id}")
+    public byte[] getPhoto(@PathVariable("id") Long id) throws Exception {
+        ArticleDetailsResponseBody Article = articleService.findArticleById(id);
+        return Files.readAllBytes(Paths.get("Imagess/1/" + Article.getPicture()));
+    }
     @GetMapping("/getAll")
     public List<ArticleResponseBody> findArticles() { return articleService.findAllArticle();}
     @GetMapping("/get/{id}")
     public ArticleDetailsResponseBody findArticleById(@PathVariable Long id){return articleService.findArticleById(id);}
-    @PostMapping(value = "/add" ,  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void addArticle(@ModelAttribute ArticleRequestBody article, @RequestParam MultipartFile image) throws IOException {
-        articleService.addArticle(article, image);
-    }
     @PutMapping("/update/{id}")
     public void editArticle(@PathVariable Long id, @ModelAttribute ArticleRequestBody article, @RequestParam MultipartFile image)throws IOException{
         articleService.editArticle(id ,article, image);
