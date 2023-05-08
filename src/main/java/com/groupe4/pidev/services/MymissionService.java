@@ -1,7 +1,9 @@
 package com.groupe4.pidev.services;
 
+import com.groupe4.pidev.Exception.OutOfNumberException;
 import com.groupe4.pidev.entities.Competence;
 import com.groupe4.pidev.entities.Mymission;
+import com.groupe4.pidev.entities.User;
 import com.groupe4.pidev.repositories.CompetenceRepository;
 import com.groupe4.pidev.repositories.MymissionRepository;
 import com.groupe4.pidev.repositories.UserRepo;
@@ -14,7 +16,7 @@ import java.util.Set;
 
 @Service
 public class MymissionService implements IMymissionService {
-    com.groupe4.pidev.repositories.MymissionRepository MymissionRepository;
+    MymissionRepository MymissionRepository;
 
     UserRepo userRepository;
     private final CompetenceRepository competenceRepository;
@@ -52,7 +54,7 @@ public class MymissionService implements IMymissionService {
     }
 
     @Override
-    public Mymission addMissionWithCompetence(Long idMission, Set<Long> idCompts ) {
+    public Mymission addMissionWithCompetence(Long idMission,Set<Long> idCompts ) {
         Mymission mymission = MymissionRepository.findById(idMission).orElse(null);
         Set<Competence> competenceList = new HashSet<>();
         for (Long idCompetence:idCompts){
@@ -69,18 +71,21 @@ public class MymissionService implements IMymissionService {
     @Transactional
     public Mymission AssignUserToMission(Long idMission, String nameU) {
         Mymission mymission = MymissionRepository.findById(idMission).orElse(null);
-       /* User user=userRepository.findUserByName(nameU);
+
+        User user = userRepository.getByUsername(nameU);
         Long nbPlacesMission = MymissionRepository.getNbUsers(idMission);
-        Set<User> UserList = new HashSet<>();
-        if(mymission.getNbPlaces() > nbPlacesMission) {
-            UserList.add(user);
-            user.setMission(mymission);
-            userRepository.save(user);
-            mymission.setUsers(UserList);
+        if(mymission.getFreePlaces()==null){
+            mymission.setFreePlaces(0L);
+        }
+        if(mymission.getNbPlaces() > nbPlacesMission ) {
+            Long nbPlacesUsed = mymission.getNbPlaces();
+            Long freeSpace = nbPlacesUsed-nbPlacesMission;
+            mymission.setFreePlaces(freeSpace-1);
+            mymission.getUsers().add(user);
             MymissionRepository.save(mymission);
         }else if (mymission.getNbPlaces() == nbPlacesMission){
-            throw new OutOfNumberException("This Mission is full");
-        }*/
+            throw new OutOfNumberException("Mission " + mymission.getId() + " is full");
+        }
         return mymission;
     }
 
@@ -95,6 +100,12 @@ public class MymissionService implements IMymissionService {
         }else
             return false;
     }
+
+    @Override
+    public Long getNbPlaces(Long idMission) {
+        return MymissionRepository.getNbUsers(idMission);
+    }
+
 
     @Override
     public Set<Competence> getCompetencesForMission(Long missionId) {
