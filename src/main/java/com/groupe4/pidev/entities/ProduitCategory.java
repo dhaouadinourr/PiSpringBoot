@@ -20,6 +20,7 @@ public class ProduitCategory {
     Long id;
     String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy ="produitCategory")
     Set<Produit> produits;
 }
