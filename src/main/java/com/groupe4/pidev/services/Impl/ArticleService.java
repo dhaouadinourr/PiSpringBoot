@@ -17,37 +17,26 @@ import java.util.stream.Collectors;
 public class ArticleService implements IArticleService {
     private ArticleRepo articleRepo;
     private UserRepo userRepo;
-
- /*   @Override
-    public void addArticle(ArticleRequestBody articleRequestBody, MultipartFile image) throws IOException {
-        //Article article = ArticleMapper.INSTANCE.articleRequestBodyToArticle(articleRequestBody);
+    @Override
+    public Long addArticle(ArticleRequestBody articleRequestBody) {
         Article article = new Article();
         article.setTitle(articleRequestBody.getTitle());
         article.setDescription(articleRequestBody.getDescription());
         article.setContent(articleRequestBody.getContent());
         article.setCreatedAt(new Date());
         article.setUpdatedAt(new Date());
-        article.setImage(image.getBytes());
-
-        articleRepo.save(article);
-    }*/
-
-
-    @Override
-    public Long addArticle(Article article) {
+        article.setPicture(articleRequestBody.getPicture());
         return articleRepo.save(article).getId();
     }
-
     @Override
-    public void editArticle(Long id, ArticleRequestBody articleRequestBody, MultipartFile image) throws IOException {
+    public Long editArticle(Long id, Article articleRequestBody) throws IOException {
         Article article = articleRepo.findArticleById(id);
         if(!articleRequestBody.getTitle().isEmpty()) article.setTitle(articleRequestBody.getTitle());
         if(!articleRequestBody.getDescription().isEmpty())article.setDescription(articleRequestBody.getDescription());
         if(!articleRequestBody.getContent().isEmpty())article.setContent(articleRequestBody.getContent());
-        //if(!image.isEmpty())article.setImage(image.getBytes());
-        if(!image.isEmpty())article.setPicture(image.getContentType());
+        if(!articleRequestBody.getPicture().isEmpty())article.setPicture(articleRequestBody.getPicture());
         article.setUpdatedAt(new Date());
-        articleRepo.save(article);
+        return articleRepo.save(article).getId();
     }
 
     @Override
@@ -73,14 +62,12 @@ public class ArticleService implements IArticleService {
         articleResponseBody.setId(article.getId());
         articleResponseBody.setTitle(article.getTitle());
         articleResponseBody.setCreationDate(article.getCreatedAt().toString());
-        //articleResponseBody.setImage(article.getImage());
         articleResponseBody.setPicture(article.getPicture());
-
-
-
-
+        articleResponseBody.setEtoile(article.getEtoile());
+        articleResponseBody.setClientEtoile(article.getClientEtoile());
         return articleResponseBody;
     }
+
 
     @Override
     public ArticleDetailsResponseBody findArticleById(Long id) {
@@ -93,8 +80,8 @@ public class ArticleService implements IArticleService {
         articleDetailsResponseBody.setDescription(article.getDescription());
         articleDetailsResponseBody.setContent(article.getContent());
         articleDetailsResponseBody.setCreatedAt(article.getCreatedAt().toString());
-        articleDetailsResponseBody.setUpdatedAt(article.getCreatedAt().toString());
-       // articleDetailsResponseBody.setImage(article.getImage());
+        articleDetailsResponseBody.setUpdatedAt(article.getUpdatedAt().toString());
+
         articleDetailsResponseBody.setPicture(article.getPicture());
 
         List<CommentResponseBody> commentList = new ArrayList<>();
@@ -103,6 +90,11 @@ public class ArticleService implements IArticleService {
         }
         articleDetailsResponseBody.setComments(commentList);
         return articleDetailsResponseBody;
+    }
+
+    @Override
+    public Article findArtiById(Long id) {
+        return articleRepo.findById(id).orElse(null);
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.groupe4.pidev.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.Map;
 
 @Setter
@@ -14,6 +13,5 @@ public class ArticleResponseBody {
     private Map<Long,Double> ClientEtoile;
 
     private String creationDate;
-   // private byte[] image;
-    String picture;
+    private String picture;
 }

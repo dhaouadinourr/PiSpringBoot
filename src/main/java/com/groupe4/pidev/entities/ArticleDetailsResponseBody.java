@@ -16,7 +16,6 @@ public class ArticleDetailsResponseBody {
     private String title;
     private String description;
     private String content;
-   // private byte[] image;
     String picture;
     private String createdAt;
     private String updatedAt;

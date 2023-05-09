@@ -1,9 +1,8 @@
 package com.groupe4.pidev.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import javax.persistence.*;
 import java.util.*;
 
@@ -25,11 +24,6 @@ public class Article {
 
     @Column(name= "content")
     private String content;
-
-
- /*   @Column(name= "image")
-    private byte[] image;*/
-
     private Date createdAt;
 
     private Double etoile;

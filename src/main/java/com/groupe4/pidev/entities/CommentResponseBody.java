@@ -9,4 +9,6 @@ public class CommentResponseBody {
     Long id;
     private String name;
     private String body;
+    private Long article_id;
+    private Article article;
 }
